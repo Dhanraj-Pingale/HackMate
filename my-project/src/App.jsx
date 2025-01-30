@@ -6,35 +6,38 @@ import Homepage from "./components/pages/Homepage";
 import ProtectedRoute from "./components/authentications/ProtectedRoute";
 import AuthProvider from "./context/AuthContext";
 import About from "./components/pages/About";
+import { ThemeProvider } from "./components/theme-provider";
 
 const App = () => {
-  return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* Protected Route */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Homepage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <ProtectedRoute>
-                <About></About>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  );
+    return (
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        {/* Protected Route */}
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoute>
+                                    <Homepage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/about"
+                            element={
+                                <ProtectedRoute>
+                                    <About></About>
+                                </ProtectedRoute>
+                            }
+                        />
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
+        </ThemeProvider>
+    );
 };
 
 export default App;
