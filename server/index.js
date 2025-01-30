@@ -8,6 +8,7 @@ import passport from "passport";
 
 import initializePassport from "./config/passportConfig.js";
 import authRoutes from "./routes/authRoutes.js";
+import studentRoutes from "./routes/studentRoutes.js";
 import connectToDb from "./config/dbConfig.js";
 
 dotenv.config();
@@ -37,6 +38,8 @@ initializePassport();
 
 // Use authentication routes
 app.use("/auth", authRoutes);
+// Use student routes
+app.use("/student", studentRoutes);
 
 // Connect to MongoDB and start the server
 async function startServer() {
