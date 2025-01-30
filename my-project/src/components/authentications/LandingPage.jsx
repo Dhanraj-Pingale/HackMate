@@ -48,18 +48,13 @@ const LandingPage = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md mt-6"
             >
-                <h2 className="text-2xl font-semibold text-center mb-4">Login as</h2>
+                <h2 className="text-2xl font-semibold text-center mb-4">User</h2>
                 <div className="grid gap-4">
                     <Link to="/login">
                         <Button className="w-full">Student Login</Button>
                     </Link>
-                    <Link to="/alogin">
-                        <Button
-                            variant="outline"
-                            className="w-full bg-black text-white hover:bg-gray-700 focus:ring-4 focus:ring-indigo-500 transition duration-300"
-                        >
-                            Admin Login
-                        </Button>
+                    <Link to="/register">
+                        <Button className="w-full">Student Registration</Button>
                     </Link>
                 </div>
             </motion.div>
@@ -71,14 +66,19 @@ const LandingPage = () => {
                 transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
                 className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md mt-6"
             >
-                <h2 className="text-2xl font-semibold text-center mb-4">Register as</h2>
+                <h2 className="text-2xl font-semibold text-center mb-4">Admin</h2>
                 <div className="grid gap-4">
                     {/* Updated Link for Student Registration */}
                     {/* Radix Modal for Registration */}
                     <Dialog.Root>
                         <Dialog.Trigger asChild>
-                            <Link to="/register">
-                                <Button className="w-full">Student Registration</Button>
+                            <Link to="/alogin">
+                                <Button
+                                    variant="outline"
+                                    className="w-full bg-black text-white hover:bg-gray-700 focus:ring-4 focus:ring-indigo-500 transition duration-300"
+                                >
+                                    Admin Login
+                                </Button>
                             </Link>
                         </Dialog.Trigger>
                         <Dialog.Content className="bg-white p-6 rounded-lg shadow-lg w-96 mx-auto">
