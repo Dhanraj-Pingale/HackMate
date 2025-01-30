@@ -17,7 +17,7 @@ const ShowReportOneHack = () => {
   const { id, hackathonId } = useParams();
   const [hackathon, setHackathon] = useState({});
   const [teams, setTeams] = useState([]);
-  const [timer,setTimer] =useState("");
+  const [timer, setTimer] = useState("");
   useEffect(() => {
     const fetchOneHackthon = async () => {
       try {
@@ -33,29 +33,37 @@ const ShowReportOneHack = () => {
     };
     fetchOneHackthon();
   }, [hackathonId]);
-  useEffect(()=>{
-    if(!hackathon.startDate) return;
-    const hackathonStartTime=new Date(hackathon.startDate).getTime();
-    const interval=setInterval(() => {
-        const now = new Date().getTime();
-    const timeLeft = hackathonStartTime - now;
-    if (timeLeft <= 0) {
+  useEffect(() => {
+    if (!hackathon.startDate) return;
+    const hackathonStartTime = new Date(hackathon.startDate).getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const timeLeft = hackathonStartTime - now;
+      if (timeLeft <= 0) {
         clearInterval(interval);
         setTimer("Hackathon Started!");
       } else {
         const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const hours = Math.floor(
+          (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
         setTimer(`${days}d ${hours}h ${minutes}m ${seconds}s`);
       }
-    }, 1000); 
+    }, 1000);
     return () => clearInterval(interval);
-}, [hackathon.startDate]);
+  }, [hackathon.startDate]);
+
+
+    const showTeamsDetaails=(id)=>{
+      navigate(`/teamDetails/${id}`);
+    }
+  
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="bg-white rounded shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 to-gray-800 p-8 text-white">
+      <Card className="bg-white text-black rounded-xl shadow-lg">
         <CardContent className="p-6">
           {/* Header Section */}
           <div className="flex items-center justify-between mb-8">
@@ -69,9 +77,7 @@ const ShowReportOneHack = () => {
             <h2 className="text-2xl font-bold text-center text-black flex-grow">
               {hackathon.name || "Hackathon Title"}
             </h2>
-            <div className="text-lg font-bold text-red-500">
-              {timer}
-            </div>
+            <div className="text-lg font-bold text-red-500">{timer}</div>
           </div>
 
           {/* Hackathon Details */}
@@ -90,8 +96,8 @@ const ShowReportOneHack = () => {
               {hackathon.duration ? `${hackathon.duration} Hours` : "N/A"}
             </p>
             <p>
-                <strong>Team member Required:</strong>{" "} 
-                {hackathon.TeamMembers || "N/A"}
+              <strong>Team member Required:</strong>{" "}
+              {hackathon.TeamMembers || "N/A"}
             </p>
             <p>
               <strong>Total Registered Teams:</strong>{" "}
@@ -101,23 +107,16 @@ const ShowReportOneHack = () => {
 
           {/* Team Table */}
           <Table className="w-full table-auto border-collapse">
-            
-              <TableRow className="bg-gray-200">
-                <TableCell className="font-bold text-black">
-                  Team Name
-                </TableCell>
-                <TableCell className="font-bold text-black">Team ID</TableCell>
-                <TableCell className="font-bold text-black">
-                  Team Leader
-                </TableCell>
-                <TableCell className="font-bold text-black">
-                  Git Repository
-                </TableCell>
-                <TableCell className="font-bold text-black">
-                  Repo Username
-                </TableCell>
-              </TableRow>
-            
+            <TableRow className="bg-gray-200">
+              <TableCell className="font-bold text-black">Team Name</TableCell>
+              <TableCell className="font-bold text-black">Team ID</TableCell>
+              <TableCell className="font-bold text-black">
+                Team Leader
+              </TableCell>
+              
+              <TableCell className="font-bold text-black">Action</TableCell>
+            </TableRow>
+
             <TableBody>
               {teams.map((team, index) => (
                 <TableRow key={index}>
@@ -128,23 +127,16 @@ const ShowReportOneHack = () => {
                     {team.teamId || "N/A"}
                   </TableCell>
                   <TableCell className="text-black">
-                    {team.leaderName || "N/A"}
+                    {team.registrationDate || "N/A"}
                   </TableCell>
-                  <TableCell className="text-blue-500 underline">
-                    {team.repoLink ? (
-                      <a
-                        href={team.repoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {team.repoLink}
-                      </a>
-                    ) : (
-                      "No Repo"
-                    )}
-                  </TableCell>
-                  <TableCell className="text-black">
-                    {team.repoUsername || "N/A"}
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      onClick={() => showTeamsDetaails(team.teamId)}
+                       className="text-white"
+                    >
+                      View Details
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

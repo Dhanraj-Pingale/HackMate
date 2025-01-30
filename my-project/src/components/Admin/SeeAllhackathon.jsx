@@ -55,8 +55,8 @@ const HackathonTable = () => {
   if (error) return <div className="text-center py-10 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="bg-white rounded shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 to-gray-800 p-8 text-white">
+      <Card className="bg-white text-black rounded-xl shadow-lg">
         <CardContent className="p-6">
           <h2 className="text-2xl font-bold mb-6 text-center text-black">Hackathon List</h2>
           <Table className="w-full table-auto border-collapse">
@@ -67,7 +67,6 @@ const HackathonTable = () => {
                 <TableCell className="font-bold text-black">Registered Teams</TableCell>
                 <TableCell className="font-bold text-black">Actions</TableCell>
               </TableRow>
-            
             <TableBody>
               {currentRows.map((hackathon) => (
                 <TableRow key={hackathon._id} className="hover:bg-gray-50">
@@ -76,7 +75,7 @@ const HackathonTable = () => {
                   <TableCell className="text-black">{hackathon.startTime}</TableCell>
                   <TableCell className="text-black">{hackathon.teamCount || hackathon.registeredTeams.length}</TableCell>
                   <TableCell>
-                    <Button variant="outline" onClick={() => showHackDetails(hackathon._id)}>
+                    <Button variant="outline" onClick={() => showHackDetails(hackathon._id)} className="text-white">
                       View Details
                     </Button>
                   </TableCell>
@@ -110,7 +109,7 @@ const HackathonTable = () => {
               </PaginationItem>
               <PaginationItem>
                 <PaginationNext
-                  className="text-white hover:bg-gray-700"
+                  className="text-white hover:bg-white"
                   onClick={() => currentPage < Math.ceil(hackathons.length / rowsPerPage) && paginate(currentPage + 1)}
                 />
               </PaginationItem>
