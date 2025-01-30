@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { AuthContext } from '@/context/AuthContext'; // Import AuthContext
 
 const CreateTeam = () => {
   const { id } = useParams(); // Hackathon ID from URL
   const navigate = useNavigate(); // For navigation
+  const { user } = useContext(AuthContext); // Get user from AuthContext
   const [teamName, setTeamName] = useState('');
   const [teamSize, setTeamSize] = useState('');
-  const [teamLeader, setTeamLeader] = useState('');
+
+  // Ensure user is logged in
+  if (!user) {
+    alert('You must be logged in to create a team.');
+    navigate('/login');
+    return null;
+  }
 
   // Handle team creation
   const handleCreateTeam = async () => {
-    if (!teamName || !teamSize || !teamLeader) {
+    if (!teamName || !teamSize) {
       alert('Please fill all fields');
       return;
     }
@@ -24,8 +32,8 @@ const CreateTeam = () => {
         teamName,
         teamSize: parseInt(teamSize, 10) || 1, // Ensure it's a valid number
         HackathonId: id,
-        teamMembers: [],
-        teamLeader,
+        teamMembers: [{ email: user.email }],
+        teamLeader: user.email, // Set logged-in user as leader
       });
 
       alert(response.data.message || 'Team created successfully!');
@@ -50,8 +58,8 @@ const CreateTeam = () => {
             <Input type="number" value={teamSize} onChange={(e) => setTeamSize(e.target.value)} placeholder="Enter team size" />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Team Leader Email</label>
-            <Input type="email" value={teamLeader} onChange={(e) => setTeamLeader(e.target.value)} placeholder="Enter leader email" />
+            <label className="block text-sm font-medium">Team Leader (You)</label>
+            <Input type="email" value={user.email} disabled className="bg-gray-100 dark:bg-gray-800" />
           </div>
           <div className="flex justify-end space-x-4">
             <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>

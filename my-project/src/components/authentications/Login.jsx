@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios';
 
 const Login = () => {
   const { login } = useContext(AuthContext); // Use login function from AuthContext
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
   const [error, setError] = useState(null); // Handle errors
   const navigate = useNavigate();
@@ -19,27 +19,29 @@ const Login = () => {
 
     try {
       // API call to authenticate user
-      const response = await axios.post("http://localhost:3000/auth/logindb", {
+      const response = await axios.post('http://localhost:3000/auth/logindb', {
         email,
         password,
       });
 
       if (response.status === 200) {
-        login(); // Set user as authenticated in AuthContext
-        navigate("/shomepage"); // Redirect to homepage
+        // Assuming response contains user data
+        const userData = response.data.user; // Update this based on your response structure
+        login(userData); // Store user data in context and localStorage
+        navigate('/shomepage'); // Redirect to homepage
       } else {
-        setError("Invalid credentials");
+        setError('Invalid credentials');
       }
     } catch (error) {
-      setError("Login failed, please try again.");
-      console.error("Login error", error);
+      setError('Login failed, please try again.');
+      console.error('Login error', error);
     } finally {
       setLoading(false); // Stop loading
     }
   };
 
   const handleRegister = () => {
-    navigate("/register"); // Navigate to the /register route when button is clicked
+    navigate('/register'); // Navigate to the /register route when button is clicked
   };
 
   return (
@@ -72,7 +74,7 @@ const Login = () => {
             className="w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
             disabled={loading} // Disable button during loading
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 

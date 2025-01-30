@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
+import { AuthContext } from '@/context/AuthContext'; // Import AuthContext properly
 
 const HackathonTeam = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
-  const [email, setEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useContext(AuthContext); // Use useContext instead of useUser
 
   useEffect(() => {
     axios
@@ -22,7 +23,7 @@ const HackathonTeam = () => {
       });
   }, [id]);
 
-  // Open modal for joining a team
+  // Open modal for confirmation
   const openModal = (teamId) => {
     setSelectedTeam(teamId);
     setIsModalOpen(true);
@@ -32,23 +33,32 @@ const HackathonTeam = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTeam(null);
-    setEmail('');
   };
 
   // Handle joining team
   const handleJoinTeam = async () => {
-    if (!email) {
-      alert('Please enter your email!');
+    if (!user?.email) {
+      alert('User email not found. Please log in again.');
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:3000/student/joinTeam', {
         teamId: selectedTeam,
-        memberEmail: email,
+        memberEmail: user.email, // Use email from context
       });
 
       alert(response.data.message || 'Successfully joined the team!');
+
+      // Update the teams state dynamically
+      setTeams((prevTeams) =>
+        prevTeams.map((team) =>
+          team._id === selectedTeam
+            ? { ...team, teamMembers: [...team.teamMembers, { email: user.email }] }
+            : team
+        )
+      );
+
       closeModal();
     } catch (error) {
       console.error('Error joining team:', error);
@@ -77,21 +87,15 @@ const HackathonTeam = () => {
         </ul>
       )}
 
-      {/* Join Team Modal */}
+      {/* Confirmation Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Enter Your Email</h2>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border p-2 w-full mb-4 rounded"
-            />
+            <h2 className="text-xl font-semibold mb-4 text-black">Confirm Team Joining</h2>
+            <p className="mb-4 text-black">Are you sure you want to join this team?</p>
             <div className="flex justify-end space-x-4">
               <Button variant="secondary" onClick={closeModal}>Cancel</Button>
-              <Button onClick={handleJoinTeam}>Join Team</Button>
+              <Button onClick={handleJoinTeam}>Confirm</Button>
             </div>
           </div>
         </div>
