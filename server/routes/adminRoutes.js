@@ -4,8 +4,8 @@ const router=exprees.Router();
 
 router.post("/createHackthon",async(req,res)=>{
     try {
-        const { name, description, startDate, startTime, duration, TeamMembers, maxTeams } = req.body;
-        if (!name || !description || !startDate || !startTime || !duration || !TeamMembers || !maxTeams) {
+        const { name, description, startDate, startTime, duration, TotalTeamMember } = req.body;
+        if (!name || !description || !startDate || !startTime || !duration || !TotalTeamMember ) {
             return res.status(400).json({ message: "All fields are required", error: true });
           }
 
@@ -15,8 +15,7 @@ router.post("/createHackthon",async(req,res)=>{
             startDate,
             startTime,
             duration,
-            TeamMembers,
-            maxTeams,
+            TotalTeamMember,
           });
 
           await hackathon.save();
