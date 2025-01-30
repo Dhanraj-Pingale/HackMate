@@ -34,7 +34,7 @@ const App = () => {
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/form" element={<StudentDetail />} />
+                        <Route path="/studentDetail" element={<StudentDetail />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>
