@@ -7,8 +7,9 @@ const HackathonTeam = () => {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
+    console.log('Fetching teams for hackathon:', id);
     axios
-      .get(`http://localhost:3000/admin/getTeams/${id}`)
+      .get(`http://localhost:3000/student/getTeams/${id}`)
       .then((response) => {
         setTeams(response.data);
       })
@@ -27,7 +28,8 @@ const HackathonTeam = () => {
           {teams.map((team) => (
             <li key={team._id} className="mb-4 p-4 border rounded-lg shadow-sm">
               <h3 className="text-xl font-semibold">{team.teamName}</h3>
-              <p>Members: {team.members.join(', ')}</p>
+              {/* Fix: Access teamMembers and extract emails */}
+              <p>Members: {team.teamMembers.length > 0 ? team.teamMembers.map(member => member.email).join(', ') : "No members yet"}</p>
             </li>
           ))}
         </ul>

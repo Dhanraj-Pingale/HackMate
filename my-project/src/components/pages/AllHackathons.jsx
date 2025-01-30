@@ -30,7 +30,7 @@ const AllHackathons = () => {
   };
 
   const handleClick = (id) => {
-    navigate(`/hackathon/${id}`);
+    navigate(`/getTeams/${id}`);
   };
 
   return (

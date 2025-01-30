@@ -40,7 +40,7 @@ const App = () => {
                         <Route path="/studentDetail" element={<StudentDetail />} />
                         <Route path="/allHackathons" element={<AllHackathons />} />
                         <Route path="/createHackathon" element={<CreateHackathon />} />
-                        <Route path="/hackathonTeam/:id" element={<HackathonTeam />} />
+                        <Route path="/getTeams/:id" element={<HackathonTeam />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>
