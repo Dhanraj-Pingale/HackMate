@@ -180,6 +180,19 @@ router.post("/confirmMember", async (req, res) => {
     }
 });
 
+router.get('/getTeams/:hackathonId', async (req, res) => {
+    try {
+        const { hackathonId } = req.params;
+        const teams = await Team.find({ HackathonId: hackathonId });
+        
+        if (!teams.length) {
+            return res.status(404).json({ message: "No teams found for this hackathon." });
+        }
 
+        res.json(teams);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 export default router;

@@ -21,18 +21,14 @@ const HackathonSchema = new mongoose.Schema({
           type: Number, 
           required:true,
         },
-        TeamMembers:{
+        teamCount:{
             type:Number,
             required:true,
-        },
-        maxTeams: {
-          type: Number,
-          required: true,
         },
         registeredTeams: [
           {
             teamName: String,
-            teamMembers: [String],
+            teamId: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
             registrationDate: {
               type: Date,
               default: Date.now,

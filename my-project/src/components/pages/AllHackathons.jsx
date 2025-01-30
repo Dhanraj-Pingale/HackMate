@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Input } from '@shadcn/ui'; 
+import { useNavigate } from 'react-router-dom';
+import { Input } from '../ui/input';
 
 const AllHackathons = () => {
   const [hackathons, setHackathons] = useState([]);
   const [filteredHackathons, setFilteredHackathons] = useState([]);
   const [search, setSearch] = useState('');
+  const navigate = useNavigate();
 
-  // Fetch all hackathons when the component mounts
   useEffect(() => {
     axios
       .get('http://localhost:3000/admin/getAllHackthon')
@@ -20,13 +21,16 @@ const AllHackathons = () => {
       });
   }, []);
 
-  // Filter hackathons based on the search query
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     const filtered = hackathons.filter((hackathon) =>
       hackathon.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setFilteredHackathons(filtered);
+  };
+
+  const handleClick = (id) => {
+    navigate(`/hackathon/${id}`);
   };
 
   return (
@@ -49,7 +53,11 @@ const AllHackathons = () => {
         ) : (
           <ul>
             {filteredHackathons.map((hackathon) => (
-              <li key={hackathon._id} className="mb-4 p-4 border rounded-lg shadow-sm">
+              <li
+                key={hackathon._id}
+                onClick={() => handleClick(hackathon._id)}
+                className="mb-4 p-4 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition"
+              >
                 <h3 className="text-xl font-semibold">{hackathon.name}</h3>
                 <p>{hackathon.description}</p>
                 <p>Start Date: {new Date(hackathon.startDate).toLocaleDateString()}</p>

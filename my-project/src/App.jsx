@@ -9,6 +9,8 @@ import About from "./components/pages/About";
 import { ThemeProvider } from "./components/theme-provider";
 import StudentDetail from "./components/pages/StudentDetail";
 import AllHackathons from "./components/pages/AllHackathons";
+import CreateHackathon from "./components/admin/CreateHackathon";
+import HackathonTeam from "./components/pages/HackathonTeam";
 
 const App = () => {
     return (
@@ -37,6 +39,8 @@ const App = () => {
                         />
                         <Route path="/studentDetail" element={<StudentDetail />} />
                         <Route path="/allHackathons" element={<AllHackathons />} />
+                        <Route path="/createHackathon" element={<CreateHackathon />} />
+                        <Route path="/hackathonTeam/:id" element={<HackathonTeam />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>

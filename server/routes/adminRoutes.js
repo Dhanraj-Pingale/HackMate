@@ -1,67 +1,73 @@
-import exprees from 'express';
-import Hackathon from '../models/Hackathon.js';
-const router=exprees.Router();
+import exprees from "express";
+import Hackathon from "../models/Hackathon.js";
+const router = exprees.Router();
 
-router.post("/createHackthon",async(req,res)=>{
-    try {
-        const { name, description, startDate, startTime, duration, TeamMembers, maxTeams } = req.body;
-        if (!name || !description || !startDate || !startTime || !duration || !TeamMembers || !maxTeams) {
-            return res.status(400).json({ message: "All fields are required", error: true });
-          }
+router.post("/createHackathon", async (req, res) => {
+  console.log("/createHackathon called...");
+  try {
+    const { name, description, startDate, startTime, duration, teamCount } =
+      req.body;
+    if (
+      !name ||
+      !description ||
+      !startDate ||
+      !startTime ||
+      !duration ||
+      !teamCount
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required", error: true });
+    }
 
-          const hackathon = new Hackathon({
-            name,
-            description,
-            startDate,
-            startTime,
-            duration,
-            TeamMembers,
-            maxTeams,
-          });
+    const hackathon = new Hackathon({
+      name,
+      description,
+      startDate,
+      startTime,
+      duration,
+      teamCount,
+    });
 
-          await hackathon.save();
-          return res.status(201).json({
-            message:"HackThon created succesfuly",
-            hackathon:hackathon,
-          })
-    } catch (error) {
-        return res.status(500).json({
-            message:error.message||error,
-            error:true
-        })
+    await hackathon.save();
+    return res.status(201).json({
+      message: "HackThon created succesfuly",
+      hackathon: hackathon,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+    });
+  }
+});
+// route for get all hackthon
+router.get("/getAllHackthon", async (req, res) => {
+  try {
+    const allhackthon = await Hackathon.find();
+    return res.json(allhackthon);
+  } catch (error) {
+    console.error("Error fetching hackathons:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to retrieve hackathons", error: true });
+  }
+});
+router.get("/getAllDetailsHackthon/:id", async (req, res) => {
+  try {
+    const hackthonId = await req.params.id;
+    // find hackthon by id
+    const OneHackthon = await Hackathon.findById(hackthonId);
+    if (!OneHackthon) {
+      return res.status(400).json({
+        message: "hackthon not exist ",
+        error: true,
+      });
     }
-})
-// route for get all hackthon 
-router.get("/getAllHackthon",async(req,res)=>{
-    try {
-        const allhackthon=await Hackathon.find();
-        return res.json(allhackthon);
-    } catch (error) {
-        console.error("Error fetching hackathons:", error);
-    res.status(500).json({ message: "Failed to retrieve hackathons",
-        error:true,
-     });
-    }
-})
-router.get("/getAllDetailsHackthon/:id",async(req,res)=>{
-    try{
-        const hackthonId= await req.params.id;
-        // find hackthon by id
-        const OneHackthon=await Hackathon.findById(hackthonId);
-        if(!OneHackthon)
-        {
-            return res.status(400).json({
-                message:"hackthon not exist ",
-                error:true,
-            })
-        }
-        res.status(200).json(OneHackthon);
-    }
-    catch(error)
-    {
-        console.error("Error fetching hackathon details:", error);
-    }
-})
-
+    res.status(200).json(OneHackthon);
+  } catch (error) {
+    console.error("Error fetching hackathon details:", error);
+  }
+});
 
 export default router;
