@@ -5,13 +5,29 @@ import { Button } from '@/components/ui/button';
 import { AuthContext } from '@/context/AuthContext'; // Import AuthContext properly
 
 const HackathonTeam = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the hackathon ID from the URL
   const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hackathonDetails, setHackathonDetails] = useState(null); // State for hackathon details
   const { user } = useContext(AuthContext); // Use useContext instead of useUser
 
+  // Fetch hackathon details
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/admin/getAllDetailsHackthon/${id}`)
+      .then((response) => {
+        // Remove the `registeredTeams` from the response data
+        const { registeredTeams, ...hackathonData } = response.data;
+        setHackathonDetails(hackathonData); // Set hackathon details excluding `registeredTeams`
+      })
+      .catch((error) => {
+        console.error('Error fetching hackathon details:', error);
+      });
+  }, [id]);
+
+  // Fetch teams associated with the hackathon
   useEffect(() => {
     axios
       .get(`http://localhost:3000/student/getTeams/${id}`)
@@ -72,6 +88,18 @@ const HackathonTeam = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Display Hackathon Details */}
+      {hackathonDetails && (
+        <div className="mb-6 p-6 bg-gray-800 text-white rounded-lg">
+          <h2 className="text-2xl font-bold">{hackathonDetails.name}</h2>
+          <p>{hackathonDetails.description}</p>
+          <p>Start Date: {new Date(hackathonDetails.startDate).toLocaleDateString()}</p>
+          <p>Start Time: {hackathonDetails.startTime}</p>
+          <p>Duration: {hackathonDetails.duration} hours</p>
+          <p>Total Team Members: {hackathonDetails.TotalTeamMember}</p>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Teams for Hackathon</h2>
         {userTeams.length === 0 && (
