@@ -43,4 +43,25 @@ router.get("/getAllHackthon",async(req,res)=>{
      });
     }
 })
+router.get("/getAllDetailsHackthon/:id",async(req,res)=>{
+    try{
+        const hackthonId= await req.params.id;
+        // find hackthon by id
+        const OneHackthon=await Hackathon.findById(hackthonId);
+        if(!OneHackthon)
+        {
+            return res.status(400).json({
+                message:"hackthon not exist ",
+                error:true,
+            })
+        }
+        res.status(200).json(OneHackthon);
+    }
+    catch(error)
+    {
+        console.error("Error fetching hackathon details:", error);
+    }
+})
+
+
 export default router;
