@@ -18,7 +18,7 @@ const Homepage = () => {
             and innovate.
           </p>
 
-          <div className="flex justify-center gap-6">
+          <div className="flex justify-center gap-6 mt-10">
             <Link to="/allHackathons">
               <Button variant="blue" size="xl">
                 Find Hackathons

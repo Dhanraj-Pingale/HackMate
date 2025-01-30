@@ -15,35 +15,37 @@ import HackathonTeam from "./components/pages/HackathonTeam";
 const App = () => {
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <AuthProvider>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        {/* Protected Route */}
-                        <Route
-                            path="/"
-                            element={
-                                <ProtectedRoute>
-                                    <Homepage />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/about"
-                            element={
-                                <ProtectedRoute>
-                                    <About></About>
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route path="/studentDetail" element={<StudentDetail />} />
-                        <Route path="/allHackathons" element={<AllHackathons />} />
-                        <Route path="/createHackathon" element={<CreateHackathon />} />
-                        <Route path="/getTeams/:id" element={<HackathonTeam />} />
-                    </Routes>
-                </BrowserRouter>
-            </AuthProvider>
+            <div className="min-h-screen bg-background text-foreground">
+                <AuthProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            {/* Protected Route */}
+                            <Route
+                                path="/"
+                                element={
+                                    <ProtectedRoute>
+                                        <Homepage />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/about"
+                                element={
+                                    <ProtectedRoute>
+                                        <About></About>
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route path="/studentDetail" element={<StudentDetail />} />
+                            <Route path="/allHackathons" element={<AllHackathons />} />
+                            <Route path="/createHackathon" element={<CreateHackathon />} />
+                            <Route path="/getTeams/:id" element={<HackathonTeam />} />
+                        </Routes>
+                    </BrowserRouter>
+                </AuthProvider>
+            </div>
         </ThemeProvider>
     );
 };
