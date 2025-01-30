@@ -37,31 +37,35 @@ router.get("/getHackathons", async (req, res) => {
 });
 
 router.post("/updateStudent", async (req, res) => {
-  const { email, techStack, bio, linkedIn, github, portfolio } = req.body;
-
-  try {
-    console.log("email", email);
-    const student = await User.findOne({ email });
-
-    if (!student) {
-      return res.status(404).json({ error: "Student not found" });
+    const { email, techStack, bio, linkedIn, github, portfolio } = req.body;
+  
+    if (!email || !Array.isArray(techStack) || techStack.length === 0 || !bio || !linkedIn || !github || !portfolio) {
+      return res.status(400).json({ error: "All fields are required, and techStack must be a non-empty array" });
     }
-
-    student.techStack = techStack;
-    student.bio = bio;
-    student.linkedIn = linkedIn;
-    student.github = github;
-    student.portfolio = portfolio;
-
-    await student.save();
-    res.status(200).json({
-      message: "Student updated successfully",
-      studentId: student._id,
-    });
-  } catch (error) {
-    console.error("Error updating student:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+  
+    try {
+      const student = await User.findOne({ email });
+      
+      if (!student) {
+        return res.status(404).json({ error: "Student not found" });
+      }
+  
+      student.techStack = techStack;
+      student.bio = bio;
+      student.linkedIn = linkedIn;
+      student.github = github;
+      student.portfolio = portfolio;
+  
+      await student.save();
+      res.status(200).json({
+        message: "Student updated successfully",
+        studentId: student._id,
+      });
+    } catch (error) {
+      console.error("Error updating student:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
 
 export default router;
