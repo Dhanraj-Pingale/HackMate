@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import Select from "react-select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import Select from "react-select";
 import { useToast } from "@/hooks/use-toast";
+import { AuthContext } from "@/context/AuthContext"; // Import the AuthContext
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 // Updated tech stack options
 const techStackOptions = [
@@ -58,10 +60,11 @@ const techStackOptions = [
 
 const StudentDetail = () => {
     const { toast } = useToast();
+    const { user } = useContext(AuthContext); // Get user from AuthContext
+    const navigate = useNavigate(); // Use navigate for redirection after update
     const [formData, setFormData] = useState({
         techStack: [], // Make sure this is an empty array by default
         bio: "",
-        email: "",
         linkedIn: "",
         github: "",
         portfolio: "",
@@ -88,7 +91,6 @@ const StudentDetail = () => {
 
         // Validate form fields
         if (
-            !formData.email ||
             !formData.bio ||
             !formData.linkedIn ||
             !formData.github ||
@@ -108,10 +110,13 @@ const StudentDetail = () => {
         try {
             const response = await axios.post(
                 "http://localhost:3000/student/updateStudent", // The endpoint you're hitting
-                formData, // Send form data
+                { ...formData, email: user?.email }, // Send form data with email from context
                 { headers: { "Content-Type": "application/json" } },
             );
             toast({ title: "Success", description: response.data.message });
+
+            // Navigate back to the previous page
+            navigate(-1); // This will take the user back to the previous page
         } catch (error) {
             console.error(error.response?.data); // Log detailed error response
             toast({
@@ -125,10 +130,10 @@ const StudentDetail = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
-            <Card className="w-full max-w-md p-6 shadow-lg bg-white dark:bg-gray-800 rounded-2xl">
+        <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
+            <Card className="w-full max-w-md p-6 shadow-lg bg-gray-800 rounded-2xl">
                 <CardHeader>
-                    <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+                    <CardTitle className="text-xl font-bold text-white">
                         Student Profile Details
                     </CardTitle>
                 </CardHeader>
@@ -137,7 +142,7 @@ const StudentDetail = () => {
                         <div>
                             <Label
                                 htmlFor="techStack"
-                                className="capitalize text-gray-900 dark:text-white"
+                                className="capitalize text-white"
                             >
                                 Tech Stack
                             </Label>
@@ -153,35 +158,8 @@ const StudentDetail = () => {
                                 onChange={handleChange}
                                 getOptionLabel={(e) => e.label}
                                 getOptionValue={(e) => e.value}
-                                className="mt-1 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                                className="mt-1 text-white bg-gray-700 border-gray-600"
                                 isSearchable
-                                styles={{
-                                    control: (provided) => ({
-                                        ...provided,
-                                        backgroundColor: "transparent",
-                                        borderColor: "transparent",
-                                        boxShadow: "none",
-                                        color: "white", // Make text color white
-                                    }),
-                                    menu: (provided) => ({
-                                        ...provided,
-                                        backgroundColor: "#333", // Dark background for dropdown
-                                    }),
-                                    option: (provided, state) => ({
-                                        ...provided,
-                                        backgroundColor: state.isSelected
-                                            ? "#1e40af"
-                                            : state.isFocused
-                                                ? "#4b5563"
-                                                : "#333", // Dark mode option hover/selected
-                                        color: "#fff", // Make option text white
-                                    }),
-                                    multiValue: (provided) => ({
-                                        ...provided,
-                                        backgroundColor: "#1e40af", // Selected item background color
-                                        color: "#fff", // Text color for selected item
-                                    }),
-                                }}
                             />
                         </div>
                         {Object.keys(formData).map(
@@ -190,7 +168,7 @@ const StudentDetail = () => {
                                     <div key={key}>
                                         <Label
                                             htmlFor={key}
-                                            className="capitalize text-gray-900 dark:text-white"
+                                            className="capitalize text-white"
                                         >
                                             {key.replace(/([A-Z])/g, " $1")}
                                         </Label>
@@ -200,7 +178,7 @@ const StudentDetail = () => {
                                             value={formData[key]}
                                             onChange={handleChangeInput}
                                             required
-                                            className="mt-1 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
+                                            className="mt-1 bg-gray-700 text-white"
                                         />
                                     </div>
                                 ),

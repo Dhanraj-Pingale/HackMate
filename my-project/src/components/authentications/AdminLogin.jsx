@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input"; // Path to your input component
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast"; // Import the useToast hook properly
+import { motion } from "framer-motion";
 
 const AdminLogin = () => {
     const navigate = useNavigate();
@@ -27,9 +28,14 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="p-8 max-w-md w-full border border-gray-300 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-semibold mb-6 text-center text-black">Admin Login</h2>
+        <div className="min-h-screen bg-gradient-to-br from-gray-800 to-black text-white flex items-center justify-center relative px-6">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-md"
+            >
+                <h2 className="text-3xl font-semibold mb-6 text-center text-gray-100">Admin Login</h2>
 
                 <div className="mb-6">
                     <Input
@@ -37,19 +43,20 @@ const AdminLogin = () => {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-4 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
                 <button
                     onClick={handleLogin}
-                    className="w-full py-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                    className="w-full py-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 focus:outline-none"
                 >
                     Login
                 </button>
-            </div>
+            </motion.div>
         </div>
     );
 };
 
 export default AdminLogin;
+
