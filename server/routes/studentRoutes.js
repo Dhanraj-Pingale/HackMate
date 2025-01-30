@@ -54,7 +54,7 @@ router.post("/updateStudent", async (req, res) => {
 router.post("/createTeam", async (req, res) => {
     const { teamName, teamSize, HackathonId, teamMembers, teamLeader } = req.body;
 
-    if (!teamName || !teamSize || !HackathonId || !teamLeader || teamMembers.length === 0) {
+    if (!teamName || !teamSize || !HackathonId || !teamLeader) {
         return res.status(400).json({ error: "All fields are required, and teamMembers must be a non-empty array" });
     }
 
@@ -100,7 +100,7 @@ router.post("/createTeam", async (req, res) => {
     }
 });
 
-router.post("/joinTeam" , async (req, res) => {
+router.post("/joinTeam", async (req, res) => {
     const { teamId, memberEmail } = req.body;
 
     if (!teamId || !memberEmail) {
@@ -118,17 +118,17 @@ router.post("/joinTeam" , async (req, res) => {
             return res.status(404).json({ error: "Team not found" });
         }
 
-        // Ensure team is not full
-        if (team.teamMembers.length >= team.teamSize) {
+        // Ensure the team is not full by checking teamMembers length
+        if (team.teamMembers.length >= team.teamSize - 1) {
             return res.status(400).json({ error: "Team is full" });
         }
 
-        // Add the new team member
-        team.teamMembers.push(teamMember);
+        // Add the new member's email with a status of 'unconfirmed'
+        team.teamMembers.push({ email: memberEmail, status: 'unconfirmed' });
         await team.save();
 
         res.status(200).json({
-            message: "Joined team successfully",
+            message: "Joined team successfully, waiting for confirmation",
             teamId,
         });
     } catch (error) {
@@ -136,6 +136,50 @@ router.post("/joinTeam" , async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+router.post("/confirmMember", async (req, res) => {
+    const { teamId, memberEmail, teamLeaderEmail } = req.body;
+
+    if (!teamId || !memberEmail || !teamLeaderEmail) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        // Ensure teamId is valid ObjectId
+        if (!ObjectId.isValid(teamId)) {
+            return res.status(400).json({ error: "Invalid Team ID" });
+        }
+
+        const team = await Team.findById(new ObjectId(teamId));
+        if (!team) {
+            return res.status(404).json({ error: "Team not found" });
+        }
+
+        // Check if the user is the team leader
+        if (team.teamLeader !== teamLeaderEmail) {
+            return res.status(403).json({ error: "Only the team leader can confirm members" });
+        }
+
+        // Find the member in the team and change their status to 'confirmed'
+        const member = team.teamMembers.find(member => member.email === memberEmail);
+        if (!member) {
+            return res.status(404).json({ error: "Member not found in the team" });
+        }
+
+        member.status = 'confirmed';  // Update the member's status to 'confirmed'
+        await team.save();
+
+        res.status(200).json({
+            message: "Member confirmed successfully",
+            memberEmail,
+            status: member.status,
+        });
+    } catch (error) {
+        console.error("Error confirming member:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 
 export default router;

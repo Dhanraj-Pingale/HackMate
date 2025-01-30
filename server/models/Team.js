@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 
 const TeamSchema = new mongoose.Schema({
-    teamName: {type: String, required: true},
-    teamSize: {type: Number, required: true},
-    HackathonId: {type: String, required: true},
-    teamMembers: {type: Array, required: true},
-    teamLeader: {type: String, required: true}
-})
+    teamName: String,
+    teamMembers: [
+        {
+            email: String,  // Member email
+            status: { type: String, default: 'unconfirmed' },
+        },
+    ],
+    teamSize: { type: Number, required: true },
+    teamLeader: String,
+    HackathonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hackathon' },
+});
 
 export default mongoose.model("Team", TeamSchema);
