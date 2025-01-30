@@ -16,6 +16,7 @@ import AdminLogin from "./components/authentications/AdminLogin";
 import AdminHome from "./components/admin/AdminHome";
 import LandingPage from "./components/authentications/LandingPage";
 import SeeAllhackathon from "./components/admin/SeeAllhackathon";
+import ShowReportOneHack from "./components/Admin/ShowReportOneHack";
 
 const App = () => {
     return (
@@ -29,7 +30,7 @@ const App = () => {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/alogin" element={<AdminLogin />} />
-
+                            <Route path="/showoneHackathon/:hackathonId" element={<ShowReportOneHack />} />
                             {/* Protected Student Routes */}
                             <Route
                                 path="/shomepage"

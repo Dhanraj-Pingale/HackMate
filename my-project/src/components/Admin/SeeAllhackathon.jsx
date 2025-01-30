@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 import {
   Pagination,
   PaginationContent,
@@ -18,6 +19,7 @@ const HackathonTable = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(10);
+  const navigate=useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,9 @@ const HackathonTable = () => {
 
     fetchData();
   }, []);
+  const showHackDetails=(id)=>{
+    navigate(`/showoneHackathon/${id}`);
+  }
 
   // Pagination logic
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -54,8 +59,7 @@ const HackathonTable = () => {
       <Card className="bg-white rounded shadow-xl">
         <CardContent className="p-6">
           <h2 className="text-2xl font-bold mb-6 text-center text-black">Hackathon List</h2>
-          <Table className="w-full">
-            <TableHead>
+          <Table className="w-full table-auto border-collapse">
               <TableRow className="bg-gray-200">
                 <TableCell className="font-bold text-black">Hackathon Name</TableCell>
                 <TableCell className="font-bold text-black">Start Date</TableCell>
@@ -63,7 +67,7 @@ const HackathonTable = () => {
                 <TableCell className="font-bold text-black">Registered Teams</TableCell>
                 <TableCell className="font-bold text-black">Actions</TableCell>
               </TableRow>
-            </TableHead>
+            
             <TableBody>
               {currentRows.map((hackathon) => (
                 <TableRow key={hackathon._id} className="hover:bg-gray-50">
@@ -72,7 +76,7 @@ const HackathonTable = () => {
                   <TableCell className="text-black">{hackathon.startTime}</TableCell>
                   <TableCell className="text-black">{hackathon.teamCount || hackathon.registeredTeams.length}</TableCell>
                   <TableCell>
-                    <Button variant="outline" onClick={() => alert(`View details for ${hackathon.name}`)}>
+                    <Button variant="outline" onClick={() => showHackDetails(hackathon._id)}>
                       View Details
                     </Button>
                   </TableCell>

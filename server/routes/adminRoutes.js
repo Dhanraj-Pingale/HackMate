@@ -2,7 +2,7 @@ import exprees from "express";
 import Hackathon from "../models/Hackathon.js";
 const router = exprees.Router();
 
-router.post("/createHackthon",async(req,res)=>{
+router.post("/createHackathon",async(req,res)=>{
     try {
         const { name, description, startDate, startTime, duration, TotalTeamMember } = req.body;
         if (!name || !description || !startDate || !startTime || !duration ) {
