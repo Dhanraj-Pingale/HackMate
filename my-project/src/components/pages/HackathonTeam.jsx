@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Button } from '@/components/ui/button';
-import { AuthContext } from '@/context/AuthContext'; // Import AuthContext properly
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/context/AuthContext"; // Import AuthContext properly
 
 const HackathonTeam = () => {
   const { id } = useParams(); // Get the hackathon ID from the URL
@@ -23,7 +23,7 @@ const HackathonTeam = () => {
         setHackathonDetails(hackathonData); // Set hackathon details excluding `registeredTeams`
       })
       .catch((error) => {
-        console.error('Error fetching hackathon details:', error);
+        console.error("Error fetching hackathon details:", error);
       });
   }, [id]);
 
@@ -35,7 +35,7 @@ const HackathonTeam = () => {
         setTeams(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching teams:', error);
+        console.error("Error fetching teams:", error);
       });
   }, [id]);
 
@@ -54,31 +54,37 @@ const HackathonTeam = () => {
   // Handle joining team
   const handleJoinTeam = async () => {
     if (!user?.email) {
-      alert('User email not found. Please log in again.');
+      alert("User email not found. Please log in again.");
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/student/joinTeam', {
-        teamId: selectedTeam,
-        memberEmail: user.email, // Use email from context
-      });
+      const response = await axios.post(
+        "http://localhost:3000/student/joinTeam",
+        {
+          teamId: selectedTeam,
+          memberEmail: user.email, // Use email from context
+        }
+      );
 
-      alert(response.data.message || 'Successfully joined the team!');
+      alert(response.data.message || "Successfully joined the team!");
 
       // Update the teams state dynamically
       setTeams((prevTeams) =>
         prevTeams.map((team) =>
           team._id === selectedTeam
-            ? { ...team, teamMembers: [...team.teamMembers, { email: user.email }] }
+            ? {
+                ...team,
+                teamMembers: [...team.teamMembers, { email: user.email }],
+              }
             : team
         )
       );
 
       closeModal();
     } catch (error) {
-      console.error('Error joining team:', error);
-      alert(error.response?.data?.message || 'Failed to join team.');
+      console.error("Error joining team:", error);
+      alert(error.response?.data?.message || "Failed to join team.");
     }
   };
 
@@ -93,7 +99,10 @@ const HackathonTeam = () => {
         <div className="mb-6 p-6 bg-gray-800 text-white rounded-lg">
           <h2 className="text-2xl font-bold">{hackathonDetails.name}</h2>
           <p>{hackathonDetails.description}</p>
-          <p>Start Date: {new Date(hackathonDetails.startDate).toLocaleDateString()}</p>
+          <p>
+            Start Date:{" "}
+            {new Date(hackathonDetails.startDate).toLocaleDateString()}
+          </p>
           <p>Start Time: {hackathonDetails.startTime}</p>
           <p>Duration: {hackathonDetails.duration} hours</p>
           <p>Total Team Members: {hackathonDetails.TotalTeamMember}</p>
@@ -104,11 +113,14 @@ const HackathonTeam = () => {
         <h2 className="text-2xl font-bold">Teams for Hackathon</h2>
         {userTeams.length === 0 && (
           <Button
-          onClick={() => navigate(`/create-team/${id}?totalTeamMember=${hackathonDetails.TotalTeamMember}`)}
-        >
-          Create New Team
-        </Button>
-        
+            onClick={() =>
+              navigate(
+                `/create-team/${id}?totalTeamMember=${hackathonDetails.TotalTeamMember}`
+              )
+            }
+          >
+            Create New Team
+          </Button>
         )}
       </div>
 
@@ -118,9 +130,17 @@ const HackathonTeam = () => {
           <h3 className="text-xl font-semibold mb-4">Your Created Teams</h3>
           <ul>
             {userTeams.map((team) => (
-              <li key={team._id} className="mb-4 p-4 border rounded-lg shadow-sm">
+              <li
+                key={team._id}
+                className="mb-4 p-4 border rounded-lg shadow-sm"
+              >
                 <h3 className="text-xl font-semibold">{team.teamName}</h3>
-                <p>Members: {team.teamMembers.length > 0 ? team.teamMembers.map(member => member.email).join(', ') : 'No members yet'}</p>
+                <p>
+                  Members:{" "}
+                  {team.teamMembers.length > 0
+                    ? team.teamMembers.map((member) => member.email).join(", ")
+                    : "No members yet"}
+                </p>
                 <Button
                   className="mt-2"
                   onClick={() => navigate(`/view-team/${team._id}`)} // Navigate to the view team page
@@ -139,9 +159,33 @@ const HackathonTeam = () => {
           <h3 className="text-xl font-semibold mb-4">Other Teams</h3>
           <ul>
             {otherTeams.map((team) => (
-              <li key={team._id} className="mb-4 p-4 border rounded-lg shadow-sm">
+              <li
+                key={team._id}
+                className="mb-4 p-4 border rounded-lg shadow-sm"
+              >
                 <h3 className="text-xl font-semibold">{team.teamName}</h3>
-                <p>Members: {team.teamMembers.length > 0 ? team.teamMembers.map(member => member.email).join(', ') : 'No members yet'}</p>
+                <div className="mb-2">
+                  <h4 className="text-lg font-semibold">Tech Stack:</h4>
+                  {team.techStack && team.techStack.length > 0 ? (
+                    <ul className="list-disc pl-5">
+                      {team.techStack.map((tech, index) => (
+                        <li key={index} className="text-sm text-gray-700">
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No tech stack specified
+                    </p>
+                  )}
+                </div>
+                <p>
+                  Members:{" "}
+                  {team.teamMembers.length > 0
+                    ? team.teamMembers.map((member) => member.email).join(", ")
+                    : "No members yet"}
+                </p>
                 <Button
                   className="mt-2"
                   onClick={() => openModal(team._id)} // Open modal to join
@@ -158,10 +202,16 @@ const HackathonTeam = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4 text-black">Confirm Team Joining</h2>
-            <p className="mb-4 text-black">Are you sure you want to join this team?</p>
+            <h2 className="text-xl font-semibold mb-4 text-black">
+              Confirm Team Joining
+            </h2>
+            <p className="mb-4 text-black">
+              Are you sure you want to join this team?
+            </p>
             <div className="flex justify-end space-x-4">
-              <Button variant="secondary" onClick={closeModal}>Cancel</Button>
+              <Button variant="secondary" onClick={closeModal}>
+                Cancel
+              </Button>
               <Button onClick={handleJoinTeam}>Confirm</Button>
             </div>
           </div>
