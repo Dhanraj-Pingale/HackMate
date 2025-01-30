@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/authentications/ProtectedRoute";
 import AuthProvider from "./context/AuthContext";
 import About from "./components/pages/About";
 import { ThemeProvider } from "./components/theme-provider";
+import StudentDetail from "./components/pages/StudentDetail";
 
 const App = () => {
     return (
@@ -33,6 +34,7 @@ const App = () => {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route path="/form" element={<StudentDetail />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>
