@@ -8,6 +8,7 @@ import AuthProvider from "./context/AuthContext";
 import About from "./components/pages/About";
 import { ThemeProvider } from "./components/theme-provider";
 import StudentDetail from "./components/pages/StudentDetail";
+import AllHackathons from "./components/pages/AllHackathons";
 
 const App = () => {
     return (
@@ -35,6 +36,7 @@ const App = () => {
                             }
                         />
                         <Route path="/studentDetail" element={<StudentDetail />} />
+                        <Route path="/allHackathons" element={<AllHackathons />} />
                     </Routes>
                 </BrowserRouter>
             </AuthProvider>
