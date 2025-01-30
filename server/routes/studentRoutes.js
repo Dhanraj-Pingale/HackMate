@@ -49,9 +49,9 @@ router.post("/updateStudent", async (req, res) => {
 });
 
 router.post("/createTeam", async (req, res) => {
-    const { teamName, teamSize, HackathonId, teamMembers, teamLeader, techStack } = req.body;
+    const { teamName, teamSize, HackathonId, teamMembers, teamLeader, leaderName, techStack, teamRepo, leaderGitUsername } = req.body;
   
-    if (!teamName || !teamSize || !HackathonId || !teamLeader || !techStack) {
+    if (!teamName || !teamSize || !HackathonId || !teamLeader || !techStack || !leaderGitUsername || !teamRepo) {
       return res.status(400).json({
         error: "All fields are required, and teamMembers must be a non-empty array",
       });
@@ -71,6 +71,7 @@ router.post("/createTeam", async (req, res) => {
   
       // Ensure the team member is valid and set status to 'confirmed'
     const validTeamMembers = [{
+        memberName: leaderName,
         email: teamLeader, // Only one member is passed
         status: 'confirmed', // Set status to 'confirmed'
       }];
@@ -82,7 +83,9 @@ router.post("/createTeam", async (req, res) => {
         techStack,
         HackathonId,
         teamMembers: validTeamMembers,
-        teamLeader, 
+        teamLeader,
+        teamRepo,
+        leaderGitUsername,
       });
   
       await team.save();
@@ -110,9 +113,9 @@ router.post("/createTeam", async (req, res) => {
   
 
 router.post("/joinTeam", async (req, res) => {
-  const { teamId, memberEmail } = req.body;
+  const { teamId, memberEmail, name } = req.body;
 
-  if (!teamId || !memberEmail) {
+  if (!teamId || !memberEmail || !name) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -133,7 +136,7 @@ router.post("/joinTeam", async (req, res) => {
     }
 
     // Add the new member's email with a status of 'unconfirmed'
-    team.teamMembers.push({ email: memberEmail, status: "unconfirmed" });
+    team.teamMembers.push({ memberName: name, email: memberEmail, status: "unconfirmed" });
     await team.save();
 
     res.status(200).json({

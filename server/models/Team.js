@@ -2,9 +2,12 @@ import mongoose from "mongoose";
 
 const TeamSchema = new mongoose.Schema({
     teamName: String,
+    teamRepo: {type: String, required: false},
+    leaderGitUsername: {type: String, required: false},
     teamMembers: [
         {
-            email: String,  // Member email
+            memberName: String,
+            email: String,  
             status: { type: String, default: 'unconfirmed' },
         },
     ],

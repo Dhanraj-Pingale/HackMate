@@ -12,11 +12,13 @@ const CreateTeam = () => {
   const { user } = useContext(AuthContext); // Get user from AuthContext
   const [teamName, setTeamName] = useState('');
   const [teamSize, setTeamSize] = useState('');
-  
+  const [teamRepo, setTeamRepo] = useState(''); // State for team repo URL
+  const [leaderGitUsername, setGithubUsername] = useState(''); // State for GitHub username
+
   const location = useLocation(); // Use useLocation to access the query parameters
   const queryParams = new URLSearchParams(location.search);
   const totalTeamMember = queryParams.get('totalTeamMember'); // Access the query param
-  
+
   // Ensure team size is automatically set to the totalTeamMember value
   useEffect(() => {
     if (totalTeamMember) {
@@ -36,7 +38,7 @@ const CreateTeam = () => {
 
   // Handle team creation
   const handleCreateTeam = async () => {
-    if (!teamName || !teamSize) {
+    if (!teamName || !teamSize || !teamRepo || !leaderGitUsername) {
       alert('Please fill all fields');
       return;
     }
@@ -54,6 +56,10 @@ const CreateTeam = () => {
         HackathonId: id,
         teamMembers: [], // Team members will be added later
         teamLeader: user.email, // Set logged-in user as leader
+        leaderName: user.name, // Set logged-in user's name
+        teamRepo, // Send repo URL
+        leaderGitUsername, // Send GitHub username
+        
       });
 
       alert(response.data.message || 'Team created successfully!');
@@ -83,6 +89,14 @@ const CreateTeam = () => {
               disabled
             />
             <p className="text-sm text-gray-500">Team size is fixed at {totalTeamMember} members</p>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium">GitHub Repository URL</label>
+            <Input value={teamRepo} onChange={(e) => setTeamRepo(e.target.value)} placeholder="Enter GitHub repository URL" />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium">GitHub Username</label>
+            <Input value={leaderGitUsername} onChange={(e) => setGithubUsername(e.target.value)} placeholder="Enter GitHub username" />
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium">Team Leader (You)</label>

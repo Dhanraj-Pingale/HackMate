@@ -64,6 +64,7 @@ const HackathonTeam = () => {
         {
           teamId: selectedTeam,
           memberEmail: user.email, // Use email from context
+          name: user.name,
         }
       );
 
