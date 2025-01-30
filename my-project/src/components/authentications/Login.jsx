@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const { login } = useContext(AuthContext); // Use login function from AuthContext
@@ -43,8 +44,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-80">
+    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-black text-white flex items-center justify-center relative px-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-md"
+      >
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -96,9 +102,10 @@ const Login = () => {
             Register here
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 export default Login;
+

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -30,11 +31,16 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-80">
+    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-black text-white flex items-center justify-center relative px-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-md"
+      >
         <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
-        
-        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -79,18 +85,19 @@ const Register = () => {
         </form>
 
         {/* Option to go to login page */}
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <p className="text-gray-600">Already registered?</p>
           <button
             onClick={handleLoginRedirect}
-            className="text-blue-600 hover:underline"
+            className="text-blue-600 hover:underline cursor-pointer"
           >
             Go to Login
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 export default Register;
+

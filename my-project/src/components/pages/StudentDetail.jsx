@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Select from "react-select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import Select from "react-select";
 import { useToast } from "@/hooks/use-toast";
 
 // Updated tech stack options
@@ -180,6 +180,18 @@ const StudentDetail = () => {
                                         ...provided,
                                         backgroundColor: "#1e40af", // Selected item background color
                                         color: "#fff", // Text color for selected item
+                                    }),
+                                    multiValueLabel: (provided) => ({
+                                        ...provided,
+                                        color: "#fff", // Ensure selected item label text is white
+                                    }),
+                                    input: (provided) => ({
+                                        ...provided,
+                                        color: "white", // Make input text color white
+                                    }),
+                                    placeholder: (provided) => ({
+                                        ...provided,
+                                        color: "white", // Make placeholder text color white
                                     }),
                                 }}
                             />
