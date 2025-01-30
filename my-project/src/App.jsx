@@ -17,6 +17,7 @@ import LandingPage from "./components/authentications/LandingPage";
 import SeeAllhackathon from "./components/admin/SeeAllhackathon";
 import ViewTeam from "./components/pages/ViewTeam";
 import ShowReportOneHack from "./components/Admin/ShowReportOneHack";
+import ShowTeamdetailed from "./components/Admin/ShowTeamDetailed";
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
               <Route path="/createhackathon" element={<CreateHackathon />} />
               <Route path="/see-allhackthon" element={<SeeAllhackathon />} />
               <Route path="/showoneHackathon/:hackathonId" element={<ShowReportOneHack />} />
+              <Route path="/teamDetails/:teamId" element={<ShowTeamdetailed />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>
