@@ -11,6 +11,7 @@ import StudentDetail from "./components/pages/StudentDetail";
 import AllHackathons from "./components/pages/AllHackathons";
 import CreateHackathon from "./components/admin/CreateHackathon";
 import HackathonTeam from "./components/pages/HackathonTeam";
+import CreateTeam from "./components/pages/createTeam";
 
 const App = () => {
     return (
@@ -42,6 +43,7 @@ const App = () => {
                             <Route path="/allHackathons" element={<AllHackathons />} />
                             <Route path="/createHackathon" element={<CreateHackathon />} />
                             <Route path="/getTeams/:id" element={<HackathonTeam />} />
+                            <Route path="/create-team/:id" element={<CreateTeam />} />
                         </Routes>
                     </BrowserRouter>
                 </AuthProvider>
