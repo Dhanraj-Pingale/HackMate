@@ -36,3 +36,34 @@ router.get('/getHackathons', async (req, res) => {
   const hackathons = await Hackathon.find();
   res.json(hackathons);
 });
+
+router.post('/updateStudent', async (req, res) => {
+    const { id, name, email } = req.body;
+    
+    if (!id || !name || !email) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+    
+    try {
+        const student = await Student.findById(id);
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+        
+        student.name = name;
+        student.email = email;
+        
+        await student.save();
+        res.json({
+            message: 'Student updated successfully',
+            studentId: student._id,
+        });
+    } catch (error) {
+        console.error('Error updating student:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    }
+
+
+
+export default router;
