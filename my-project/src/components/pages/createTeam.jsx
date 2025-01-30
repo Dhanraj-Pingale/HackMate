@@ -32,7 +32,7 @@ const CreateTeam = () => {
         teamName,
         teamSize: parseInt(teamSize, 10) || 1, // Ensure it's a valid number
         HackathonId: id,
-        teamMembers: [{ email: user.email }],
+        teamMembers: [],
         teamLeader: user.email, // Set logged-in user as leader
       });
 

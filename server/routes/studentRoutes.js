@@ -69,24 +69,19 @@ router.post("/createTeam", async (req, res) => {
         return res.status(404).json({ error: "Hackathon not found" });
       }
   
-      // Ensure the number of members is within the team size
-      const totalTeamMembers = teamMembers.length + 1; // Adding 1 for the team leader
-      if (totalTeamMembers !== teamSize) {
-        return res.status(400).json({
-          error: `Team size mismatch. Expected ${teamSize} members, but found ${totalTeamMembers} members.`,
-        });
-      }
+      // Ensure the team member is valid and set status to 'confirmed'
+    const validTeamMembers = [{
+        email: teamLeader, // Only one member is passed
+        status: 'confirmed', // Set status to 'confirmed'
+      }];
   
-      // Ensure the team leader is included in the team members array
-      const updatedTeamMembers = [...teamMembers, { email: teamLeader, status: "confirmed" }];
-  
-      // Create the new team with the specified teamSize
+      // Create the new team with the specified team size
       const team = new Team({
         teamName,
-        teamSize, // Set the teamSize
+        teamSize,
         HackathonId,
-        teamMembers: updatedTeamMembers, // Add team leader as a team member
-        teamLeader, // Set the team leader
+        teamMembers: validTeamMembers,
+        teamLeader, 
       });
   
       await team.save();
@@ -213,5 +208,35 @@ router.get("/getTeams/:hackathonId", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get("/viewTeam/:teamId", async (req, res) => {
+    const { teamId } = req.params;
+  
+    if (!ObjectId.isValid(teamId)) {
+      return res.status(400).json({ error: "Invalid Team ID" });
+    }
+  
+    try {
+      const team = await Team.findById(new ObjectId(teamId));
+  
+      if (!team) {
+        return res.status(404).json({ error: "Team not found" });
+      }
+  
+      res.status(200).json({
+        message: "Team details fetched successfully",
+        team: {
+          teamName: team.teamName,
+          teamLeader: team.teamLeader,
+          teamMembers: team.teamMembers,
+          teamSize: team.teamSize,
+          status: "success", // You can add more details if needed
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching team:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 export default router;

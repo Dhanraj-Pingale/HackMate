@@ -15,6 +15,7 @@ import AdminLogin from "./components/authentications/AdminLogin";
 import AdminHome from "./components/admin/AdminHome";
 import LandingPage from "./components/authentications/LandingPage";
 import SeeAllhackathon from "./components/admin/SeeAllhackathon";
+import ViewTeam from "./components/pages/ViewTeam";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
               <Route path="/allHackathons" element={<AllHackathons />} />
               <Route path="/getTeams/:id" element={<HackathonTeam />} />
               <Route path="/create-team/:id" element={<CreateTeam />} />
+              <Route path="/view-team/:teamId" element={<ViewTeam />} />
 
               {/* Admin Routes */}
               <Route path="/ahome" element={<AdminHome />} />
