@@ -49,9 +49,9 @@ router.post("/updateStudent", async (req, res) => {
 });
 
 router.post("/createTeam", async (req, res) => {
-    const { teamName, teamSize, HackathonId, teamMembers, teamLeader, leaderName, techStack } = req.body;
+    const { teamName, teamSize, HackathonId, teamMembers, teamLeader, leaderName, techStack, teamRepo, leaderGitUsername } = req.body;
   
-    if (!teamName || !teamSize || !HackathonId || !teamLeader || !techStack) {
+    if (!teamName || !teamSize || !HackathonId || !teamLeader || !techStack || !leaderGitUsername || !teamRepo) {
       return res.status(400).json({
         error: "All fields are required, and teamMembers must be a non-empty array",
       });
@@ -83,7 +83,9 @@ router.post("/createTeam", async (req, res) => {
         techStack,
         HackathonId,
         teamMembers: validTeamMembers,
-        teamLeader, 
+        teamLeader,
+        teamRepo,
+        leaderGitUsername,
       });
   
       await team.save();
