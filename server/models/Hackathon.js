@@ -21,7 +21,7 @@ const HackathonSchema = new mongoose.Schema({
           type: Number, 
           required:true,
         },
-        teamCount:{
+        TotalTeamMember:{
             type:Number,
             required:true,
         },

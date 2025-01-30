@@ -2,32 +2,21 @@ import exprees from "express";
 import Hackathon from "../models/Hackathon.js";
 const router = exprees.Router();
 
-router.post("/createHackathon", async (req, res) => {
-  console.log("/createHackathon called...");
-  try {
-    const { name, description, startDate, startTime, duration, teamCount } =
-      req.body;
-    if (
-      !name ||
-      !description ||
-      !startDate ||
-      !startTime ||
-      !duration ||
-      !teamCount
-    ) {
-      return res
-        .status(400)
-        .json({ message: "All fields are required", error: true });
-    }
+router.post("/createHackthon",async(req,res)=>{
+    try {
+        const { name, description, startDate, startTime, duration, TotalTeamMember } = req.body;
+        if (!name || !description || !startDate || !startTime || !duration ) {
+            return res.status(400).json({ message: "All fields are required", error: true });
+          }
 
-    const hackathon = new Hackathon({
-      name,
-      description,
-      startDate,
-      startTime,
-      duration,
-      teamCount,
-    });
+          const hackathon = new Hackathon({
+            name,
+            description,
+            startDate,
+            startTime,
+            duration,
+            TotalTeamMember,
+          });
 
     await hackathon.save();
     return res.status(201).json({

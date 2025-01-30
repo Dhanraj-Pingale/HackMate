@@ -14,7 +14,7 @@ const CreateHackathon = () => {
     startDate: "",
     startTime: "",
     duration: "",
-    teamCount: "",
+    TotalTeamMember: "",
   });
 
   const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ const CreateHackathon = () => {
 
       if (response.status === 201) {
         // Successfully created, redirect to another page or show success message
-        navigate("/"); // or redirect to a different page after successful creation
+        navigate("/ahome"); // or redirect to a different page after successful creation
         console.log("Hackathon created successfully:", response.data);
       }
     } catch (error) {
@@ -116,13 +116,13 @@ const CreateHackathon = () => {
             </div>
 
             <div>
-              <Label htmlFor="teamCount">Members per Team</Label>
+              <Label htmlFor="TotalTeamMember">Members per Team</Label>
               <Input
                 type="number"
-                id="teamCount"
-                name="teamCount"
+                id="TotalTeamMember"
+                name="TotalTeamMember"
                 placeholder="Enter max members per team"
-                value={formData.teamCount}
+                value={formData.TotalTeamMember}
                 onChange={handleChange}
                 required
               />

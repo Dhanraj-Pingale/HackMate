@@ -11,7 +11,11 @@ import StudentDetail from "./components/pages/StudentDetail";
 import AllHackathons from "./components/pages/AllHackathons";
 import CreateHackathon from "./components/admin/CreateHackathon";
 import HackathonTeam from "./components/pages/HackathonTeam";
-import CreateTeam from "./components/pages/createTeam";
+import CreateTeam from "./components/pages/CreateTeam";
+import AdminLogin from "./components/authentications/AdminLogin";
+import AdminHome from "./components/admin/AdminHome";
+import LandingPage from "./components/authentications/LandingPage";
+import SeeAllhackathon from "./components/admin/SeeAllhackathon";
 
 const App = () => {
     return (
@@ -20,11 +24,15 @@ const App = () => {
                 <AuthProvider>
                     <BrowserRouter>
                         <Routes>
+                            {/* Public Routes */}
+                            <Route path="/" element={<LandingPage />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
-                            {/* Protected Route */}
+                            <Route path="/alogin" element={<AdminLogin />} />
+
+                            {/* Protected Student Routes */}
                             <Route
-                                path="/"
+                                path="/shomepage"
                                 element={
                                     <ProtectedRoute>
                                         <Homepage />
@@ -35,15 +43,19 @@ const App = () => {
                                 path="/about"
                                 element={
                                     <ProtectedRoute>
-                                        <About></About>
+                                        <About />
                                     </ProtectedRoute>
                                 }
                             />
                             <Route path="/studentDetail" element={<StudentDetail />} />
                             <Route path="/allHackathons" element={<AllHackathons />} />
-                            <Route path="/createHackathon" element={<CreateHackathon />} />
                             <Route path="/getTeams/:id" element={<HackathonTeam />} />
                             <Route path="/create-team/:id" element={<CreateTeam />} />
+
+                            {/* Protected Admin Routes */}
+                            <Route path="/ahome" element={<AdminHome />} />
+                            <Route path="/createhackathon" element={<CreateHackathon />} />
+                            <Route path="/see-allhackthon" element={<SeeAllhackathon />} />
                         </Routes>
                     </BrowserRouter>
                 </AuthProvider>
