@@ -103,7 +103,12 @@ const HackathonTeam = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Teams for Hackathon</h2>
         {userTeams.length === 0 && (
-          <Button onClick={() => navigate(`/create-team/${id}`)}>Create New Team</Button>
+          <Button
+          onClick={() => navigate(`/create-team/${id}?totalTeamMember=${hackathonDetails.TotalTeamMember}`)}
+        >
+          Create New Team
+        </Button>
+        
         )}
       </div>
 

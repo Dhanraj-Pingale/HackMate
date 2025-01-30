@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,20 @@ const CreateTeam = () => {
   const { user } = useContext(AuthContext); // Get user from AuthContext
   const [teamName, setTeamName] = useState('');
   const [teamSize, setTeamSize] = useState('');
+  
+  const location = useLocation(); // Use useLocation to access the query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const totalTeamMember = queryParams.get('totalTeamMember'); // Access the query param
+  
+  // Ensure team size is automatically set to the totalTeamMember value
+  useEffect(() => {
+    if (totalTeamMember) {
+      setTeamSize(totalTeamMember);
+    }
+  }, [totalTeamMember]);
+
+  console.log("Hackathon ID:", id);
+  console.log("Total Team Members Allowed:", totalTeamMember);
 
   // Ensure user is logged in
   if (!user) {
@@ -27,12 +41,18 @@ const CreateTeam = () => {
       return;
     }
 
+    // Ensure team size is equal to totalTeamMember
+    if (teamSize !== totalTeamMember) {
+      alert(`Team size must be ${totalTeamMember} members.`);
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:3000/student/createTeam', {
         teamName,
         teamSize: parseInt(teamSize, 10) || 1, // Ensure it's a valid number
         HackathonId: id,
-        teamMembers: [],
+        teamMembers: [], // Team members will be added later
         teamLeader: user.email, // Set logged-in user as leader
       });
 
@@ -55,7 +75,14 @@ const CreateTeam = () => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium">Team Size</label>
-            <Input type="number" value={teamSize} onChange={(e) => setTeamSize(e.target.value)} placeholder="Enter team size" />
+            <Input 
+              type="number" 
+              value={teamSize} 
+              onChange={(e) => setTeamSize(e.target.value)} 
+              placeholder="Enter team size" 
+              disabled
+            />
+            <p className="text-sm text-gray-500">Team size is fixed at {totalTeamMember} members</p>
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium">Team Leader (You)</label>
