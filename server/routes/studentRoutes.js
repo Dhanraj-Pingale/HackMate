@@ -1,5 +1,6 @@
 import express from "express";
 import Hackathon from "../models/Hackathon.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -36,23 +37,24 @@ router.get("/getHackathons", async (req, res) => {
 });
 
 router.post("/updateStudent", async (req, res) => {
-  const { techStack, bio, linkedIn, gitHub, portfolio } = req.body;
-
-  if (!techStack || !bio || !linkedIn || !gitHub || !portfolio) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
+  const { email, techStack, bio, linkedIn, github, portfolio } = req.body;
 
   try {
-    const student = new Student({
-      techStack,
-      bio,
-      linkedIn,
-      gitHub,
-      portfolio,
-    });
+    console.log("email", email);
+    const student = await User.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    student.techStack = techStack;
+    student.bio = bio;
+    student.linkedIn = linkedIn;
+    student.github = github;
+    student.portfolio = portfolio;
 
     await student.save();
-    res.status(201).json({
+    res.status(200).json({
       message: "Student updated successfully",
       studentId: student._id,
     });
