@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Input } from '../ui/input';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Input } from "../ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const AllHackathons = () => {
   const [hackathons, setHackathons] = useState([]);
   const [filteredHackathons, setFilteredHackathons] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/admin/getAllHackthon')
+      .get("http://localhost:3000/admin/getAllHackthon")
       .then((response) => {
         setHackathons(response.data);
         setFilteredHackathons(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching hackathons:', error);
+        console.error("Error fetching hackathons:", error);
       });
   }, []);
 
@@ -34,36 +35,38 @@ const AllHackathons = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-6 text-white">
       {/* Search Bar */}
-      <div className="mb-4">
+      <div className="mb-6">
         <Input
           type="text"
           value={search}
           onChange={handleSearchChange}
           placeholder="Search hackathons by name"
-          className="w-full max-w-md"
+          className="w-full max-w-md bg-gray-800 text-white border border-gray-700"
         />
       </div>
 
       {/* Display Hackathons */}
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredHackathons.length === 0 ? (
-          <p>No hackathons found</p>
+          <p className="text-gray-400">No hackathons found</p>
         ) : (
-          <ul>
-            {filteredHackathons.map((hackathon) => (
-              <li
-                key={hackathon._id}
-                onClick={() => handleClick(hackathon._id)}
-                className="mb-4 p-4 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition"
-              >
-                <h3 className="text-xl font-semibold">{hackathon.name}</h3>
-                <p>{hackathon.description}</p>
-                <p>Start Date: {new Date(hackathon.startDate).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
+          filteredHackathons.map((hackathon) => (
+            <Card
+              key={hackathon._id}
+              onClick={() => handleClick(hackathon._id)}
+              className="bg-gray-900 text-white border border-gray-800 shadow-lg cursor-pointer hover:bg-gray-800 transition"
+            >
+              <CardHeader>
+                <CardTitle>{hackathon.name}</CardTitle>
+                <CardDescription>{hackathon.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-400">Start Date: {new Date(hackathon.startDate).toLocaleDateString()}</p>
+              </CardContent>
+            </Card>
+          ))
         )}
       </div>
     </div>
@@ -71,3 +74,4 @@ const AllHackathons = () => {
 };
 
 export default AllHackathons;
+
