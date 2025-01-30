@@ -1,0 +1,43 @@
+[
+  {
+    "name": "typescript",
+    "path": "/tech-logos/typescript.png",
+    "id": 1
+  },
+  {
+    "name": "javascript",
+    "path": "/tech-logos/javascript.png",
+    "id": 2
+  },
+  {
+    "name": "react",
+    "path": "/tech-logos/react.png",
+    "id": 3
+  },
+  {
+    "name": "next.js",
+    "path": "/tech-logos/nextJs.png",
+    "id": 4
+  },
+  {
+    "name": "node.js",
+    "path": "/tech-logos/nodeJs.png",
+    "id": 5
+  },
+  {
+    "name": "express.js",
+    "path": "/tech-logos/expressJs.png",
+    "id": 6
+  },
+  {
+    "name": "go",
+    "path": "/tech-logos/go.png",
+    "id": 7
+  },
+  {
+    "name": "rust",
+    "path": "/tech-logos/rust.png",
+    "id": 8
+  }
+]
+
