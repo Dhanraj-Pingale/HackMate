@@ -54,6 +54,7 @@ const CreateTeam = () => {
         HackathonId: id,
         teamMembers: [], // Team members will be added later
         teamLeader: user.email, // Set logged-in user as leader
+        leaderName: user.name, // Set logged-in user's name
       });
 
       alert(response.data.message || 'Team created successfully!');

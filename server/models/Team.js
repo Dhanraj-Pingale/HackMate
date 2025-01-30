@@ -4,7 +4,8 @@ const TeamSchema = new mongoose.Schema({
     teamName: String,
     teamMembers: [
         {
-            email: String,  // Member email
+            memberName: String,
+            email: String,  
             status: { type: String, default: 'unconfirmed' },
         },
     ],
