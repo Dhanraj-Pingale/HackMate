@@ -1,6 +1,7 @@
 import express from "express";
 import Hackathon from "../models/Hackathon.js";
 import User from "../models/User.js";
+import Team from "../models/Team.js";
 
 const router = express.Router();
 
@@ -66,6 +67,38 @@ router.post("/updateStudent", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
-  
+
+
+router.post("/createTeam" , async (req, res) => {
+    const { teamName, teamSize, HackathonId, teamMembers, teamLeader } = req.body;
+
+    if (!teamName || !teamSize || !HackathonId || !teamLeader || !teamMembers.length === 0) {
+        return res.status(400).json({ error: "All fields are required, and memberIds must be a non-empty array" });
+    }
+
+    try {
+        // const hackathon = await Hackathon.findById(hackathonId);
+        // if(!hackathon) {
+        //     return res.status(404).json({ error: "Hackathon not found" });
+        // }
+
+        const team = new Team({
+            teamName,
+            teamSize,
+            HackathonId,
+            teamMembers,
+            teamLeader
+        });
+
+        await team.save();
+        res.status(201).json({
+            message: "Team created successfully",
+            teamId: team._id
+        });
+    } catch (error) {
+        console.error("Error creating team:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 export default router;
