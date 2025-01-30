@@ -31,7 +31,12 @@ const HackathonSchema = new mongoose.Schema({
         },
         registeredTeams: [
           {
-            teamId: String,
+            teamName: String,
+            teamMembers: [String],
+            registrationDate: {
+              type: Date,
+              default: Date.now,
+            },
           },
         ],
     })
