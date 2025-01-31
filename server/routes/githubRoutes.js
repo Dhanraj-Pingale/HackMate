@@ -5,7 +5,7 @@ import axios from 'axios';
 const router = exprees.Router();
 
 const GITHUB_API_URL = "https://api.github.com";
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 // Get branches of a repository
 router.get('/branches', async (req, res) => {
