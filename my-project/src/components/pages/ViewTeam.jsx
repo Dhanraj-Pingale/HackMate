@@ -69,11 +69,34 @@ const ViewTeam = () => {
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">{team.teamName}</h2>
 
+      {/* Team Information */}
+      <div className="mb-4">
+        <p className="font-semibold">Team Repo:</p>
+        <p>{team.teamRepo}</p>
+      </div>
+
+      <div className="mb-4">
+        <p className="font-semibold">Leader GitHub Username:</p>
+        <p>{team.leaderGitUsername}</p>
+      </div>
+
+      <div className="mb-4">
+  <p className="font-semibold">Tech Stack:</p>
+  <p>{Array.isArray(team.techStack) ? team.techStack.join(', ') : 'No tech stack specified'}</p>
+</div>
+
+
+      <div className="mb-4">
+        <p className="font-semibold">Team Size:</p>
+        <p>{team.teamSize}</p>
+      </div>
+
       <div className="mb-4">
         <p className="font-semibold">Team Leader:</p>
         <p>{team.teamLeader}</p>
       </div>
 
+      {/* Team Members */}
       <div className="mb-4">
         <p className="font-semibold">Team Members:</p>
         {team.teamMembers.length === 0 ? (
@@ -82,7 +105,7 @@ const ViewTeam = () => {
           <ul>
             {team.teamMembers.map((member, index) => (
               <li key={index}>
-                {member.email} - {member.status}
+                {member.memberName} ({member.email}) - {member.status}
                 {/* Show "Confirm" button only if the user is the team leader and member is unconfirmed */}
                 {user?.email === team.teamLeader && member.status !== 'confirmed' && (
                   <button
@@ -96,11 +119,6 @@ const ViewTeam = () => {
             ))}
           </ul>
         )}
-      </div>
-
-      <div className="mb-4">
-        <p className="font-semibold">Team Size:</p>
-        <p>{team.teamSize}</p>
       </div>
     </div>
   );
