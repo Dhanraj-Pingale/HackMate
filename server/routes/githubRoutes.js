@@ -2,7 +2,10 @@
 
 import exprees from "express";
 import axios from 'axios';
+import dotenv from "dotenv"
+
 const router = exprees.Router();
+dotenv.config();
 
 const GITHUB_API_URL = "https://api.github.com";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
