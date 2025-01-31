@@ -6,8 +6,10 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { useToast } from "@/hooks/use-toast"; // Import toast hook for notifications
 
 const CreateHackathon = () => {
+  const { toast } = useToast(); // Hook for showing toast notifications
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -17,7 +19,7 @@ const CreateHackathon = () => {
     TotalTeamMember: "",
   });
 
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // To redirect after successful creation
 
   const handleChange = (e) => {
@@ -26,6 +28,18 @@ const CreateHackathon = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    // Validate form fields
+    if (!formData.name || !formData.description || !formData.startDate || !formData.startTime || !formData.duration || !formData.TotalTeamMember) {
+      toast({
+        title: "Error",
+        description: "All fields are required.",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       // Send form data to the backend
@@ -34,26 +48,35 @@ const CreateHackathon = () => {
       });
 
       if (response.status === 201) {
-        // Successfully created, redirect to another page or show success message
-        navigate("/ahome"); // or redirect to a different page after successful creation
-        console.log("Hackathon created successfully:", response.data);
+        // Successfully created, show success message and redirect
+        toast({
+          title: "Success",
+          description: "Hackathon created successfully!",
+        });
+        navigate("/ahome"); // Redirect to another page
       }
     } catch (error) {
-      setError(error.response ? error.response.data.message : error.message);
+      toast({
+        title: "Error",
+        description: error.response ? error.response.data.message : "Something went wrong",
+        variant: "destructive",
+      });
       console.error("Error creating hackathon:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <Card className="w-full max-w-lg">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-4">
+      <Card className="w-full max-w-lg p-6 shadow-lg bg-gray-800 rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl">Add Hackathon</CardTitle>
+          <CardTitle className="text-2xl font-bold text-white">Add Hackathon</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Hackathon Name</Label>
+              <Label htmlFor="name" className="text-white">Hackathon Name</Label>
               <Input
                 type="text"
                 id="name"
@@ -62,11 +85,12 @@ const CreateHackathon = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description" className="text-white">Description</Label>
               <Input
                 type="text"
                 id="description"
@@ -75,11 +99,12 @@ const CreateHackathon = () => {
                 value={formData.description}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="startDate">Start Date</Label>
+              <Label htmlFor="startDate" className="text-white">Start Date</Label>
               <Input
                 type="date"
                 id="startDate"
@@ -87,11 +112,12 @@ const CreateHackathon = () => {
                 value={formData.startDate}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="startTime">Start Time</Label>
+              <Label htmlFor="startTime" className="text-white">Start Time</Label>
               <Input
                 type="time"
                 id="startTime"
@@ -99,11 +125,12 @@ const CreateHackathon = () => {
                 value={formData.startTime}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="duration">Duration (hours)</Label>
+              <Label htmlFor="duration" className="text-white">Duration (hours)</Label>
               <Input
                 type="number"
                 id="duration"
@@ -112,11 +139,12 @@ const CreateHackathon = () => {
                 value={formData.duration}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
             <div>
-              <Label htmlFor="TotalTeamMember">Members per Team</Label>
+              <Label htmlFor="TotalTeamMember" className="text-white">Members per Team</Label>
               <Input
                 type="number"
                 id="TotalTeamMember"
@@ -125,15 +153,12 @@ const CreateHackathon = () => {
                 value={formData.TotalTeamMember}
                 onChange={handleChange}
                 required
+                className="mt-1 bg-gray-700 text-white"
               />
             </div>
 
-            {error && (
-              <div className="text-red-600 mt-2 text-center">{error}</div>
-            )}
-
-            <Button type="submit" className="w-full">
-              Submit
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating..." : "Create Hackathon"}
             </Button>
           </form>
 
@@ -147,3 +172,4 @@ const CreateHackathon = () => {
 };
 
 export default CreateHackathon;
+
