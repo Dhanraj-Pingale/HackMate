@@ -11,7 +11,7 @@ import authRoutes from "./routes/authRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
 import connectToDb from "./config/dbConfig.js";
 import adminRoutes from "./routes/adminRoutes.js";
-
+import githubRoutes from "./routes/githubRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -43,6 +43,8 @@ app.use("/auth", authRoutes);
 app.use("/student", studentRoutes);
 
 app.use("/admin",adminRoutes);
+
+app.use('/github',githubRoutes)
 
 // Connect to MongoDB and start the server
 async function startServer() {
