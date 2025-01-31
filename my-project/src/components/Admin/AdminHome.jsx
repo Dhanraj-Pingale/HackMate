@@ -6,7 +6,6 @@ import Lottie from "lottie-react";
 // Import Lottie animation files (You'll need to have these files in your project)
 import createHackathonAnimation from "../../assets/createHackathonAnimation.json";
 import seeAllHackathonsAnimation from "../../assets/seeAllHackathonsAnimation.json";
-import { Button } from "../ui/button";
 
 const AdminHome = () => {
   const navigate = useNavigate();
