@@ -72,6 +72,7 @@ const HackathonTeam = () => {
           teamId: selectedTeam,
           memberEmail: user.email,
           name: user.name,
+          status: "pending",  // Set status as pending
         }
       );
 
@@ -83,7 +84,7 @@ const HackathonTeam = () => {
                 ...team,
                 teamMembers: [
                   ...team.teamMembers,
-                  { email: user.email, status: "pending" },
+                  { email: user.email, status: "pending" },  // Add as pending member
                 ],
               }
             : team
@@ -95,6 +96,35 @@ const HackathonTeam = () => {
     } catch (error) {
       console.error("Error joining team:", error);
       alert(error.response?.data?.message || "Failed to join team.");
+    }
+  };
+
+  const handleConfirmMember = async (teamId, memberEmail) => {
+    try {
+      const response = await axios.post("http://localhost:3000/student/confirmMember", {
+        teamId,
+        memberEmail,
+      });
+
+      alert(response.data.message || "Member confirmed!");
+      // Update the team's member status to confirmed
+      setTeams((prevTeams) =>
+        prevTeams.map((team) =>
+          team._id === teamId
+            ? {
+                ...team,
+                teamMembers: team.teamMembers.map((member) =>
+                  member.email === memberEmail
+                    ? { ...member, status: "confirmed" }
+                    : member
+                ),
+              }
+            : team
+        )
+      );
+    } catch (error) {
+      console.error("Error confirming member:", error);
+      alert("Failed to confirm member.");
     }
   };
 
@@ -149,37 +179,54 @@ const HackathonTeam = () => {
             </div>
           )}
 
-          {/* Chatbot Button */}
-          <Button className="mt-4" onClick={toggleChatbot}>
-            🗣️ Ask a Question
-          </Button>
+         {/* Chatbot Button */}
+<Button className="mt-4 bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" onClick={toggleChatbot}>
+  🗣️ Ask a Question
+</Button>
 
-          {/* Chatbot Interface */}
-          {isChatbotOpen && (
-            <div className="mt-4 bg-white p-4 rounded-md shadow-lg">
-              <h3 className="text-xl font-semibold">
-                Chat with our Hackathon Bot
-              </h3>
-              <div>
-                <textarea
-                  className="w-full p-2 mt-2 border rounded-md"
-                  placeholder="Ask me anything about the hackathon..."
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleAskQuestion(e.target.value);
-                      e.target.value = "";
-                    }
-                  }}
-                />
-              </div>
-              {chatbotResponse && (
-                <div className="mt-2 p-4 bg-gray-200 rounded-md">
-                  <p className="font-semibold">Bot Response:</p>
-                  <p>{chatbotResponse}</p>
-                </div>
-              )}
+{/* Chatbot Interface */}
+{isChatbotOpen && (
+  <div className="mt-4 bg-black p-6 rounded-lg shadow-xl w-full max-w-lg mx-auto">
+    <h3 className="text-2xl font-semibold text-white mb-4">Chat with our Hackathon Bot</h3>
+    
+    <div className="flex flex-col space-y-4 h-96 overflow-y-auto">
+      {/* Chatbot Conversation */}
+      <div className="flex flex-col space-y-4 overflow-y-auto p-2 bg-gray-800 rounded-lg h-full">
+        <div className="overflow-y-auto max-h-72">
+          {/* Chatbot Messages */}
+          {chatbotResponse && (
+            <div className="bg-gray-700 p-3 rounded-lg max-w-xs mx-auto">
+              <p className="text-white">{chatbotResponse}</p>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* User Input */}
+      <div className="flex items-center space-x-2">
+        <textarea
+          className="w-full p-3 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-black text-white placeholder-gray-400"
+          placeholder="Ask me anything about the hackathon..."
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleAskQuestion(e.target.value);
+              e.target.value = "";
+            }
+          }}
+        />
+        <button
+          onClick={() => handleAskQuestion(document.querySelector("textarea").value)}
+          className="p-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none transition-colors"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
         </motion.div>
 
         {/* Right Section: Hackathon Teams */}
@@ -198,7 +245,7 @@ const HackathonTeam = () => {
                     `/create-team/${id}?totalTeamMember=${hackathonDetails.TotalTeamMember}`
                   )
                 }
-                disabled={hasJoinedTeam}
+                disabled={hasJoinedTeam || userTeams.length > 0}
               >
                 ➕ Create New Team
               </Button>
@@ -245,11 +292,19 @@ const HackathonTeam = () => {
                         .map((member) => member.email)
                         .join(", ")}
                     </p>
+                    {/* Show Pending Status if not Confirmed */}
+                    {team.teamMembers.some(
+                      (member) => member.email === user?.email
+                    ) && !team.teamMembers.some(
+                      (member) => member.email === user?.email && member.status === "confirmed"
+                    ) && (
+                      <p className="mt-2 text-yellow-500">Pending</p>
+                    )}
+                    {/* If the user is not pending, show View Team button */}
                     {!hasJoinedTeam && (
                       <Button
                         className="mt-2"
                         onClick={() => openModal(team._id)}
-                        disabled={hasJoinedTeam}
                       >
                         Join Team
                       </Button>

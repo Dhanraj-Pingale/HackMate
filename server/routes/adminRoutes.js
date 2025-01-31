@@ -1,5 +1,6 @@
 import exprees from "express";
 import Hackathon from "../models/Hackathon.js";
+import Team from "../models/Team.js";
 const router = exprees.Router();
 
 router.post("/createHackathon",async(req,res)=>{
@@ -58,5 +59,22 @@ router.get("/getAllDetailsHackthon/:id", async (req, res) => {
     console.error("Error fetching hackathon details:", error);
   }
 });
+router.get("/getTeamDetails/:id", async (req, res) => {
+  try {
+    const teamId = await req.params.id;
+    // find hackthon by id
+    const existTeam = await Team.findById(teamId);
+    if (!existTeam) {
+      return res.status(400).json({
+        message: "team not exist ",
+        error: true,
+      });
+    }
+    res.status(200).json(existTeam);
+  } catch (error) {
+    console.error("Error fetching hackathon details:", error);
+  }
+});
+
 
 export default router;

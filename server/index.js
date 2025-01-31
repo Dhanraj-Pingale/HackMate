@@ -12,7 +12,7 @@ import studentRoutes from "./routes/studentRoutes.js";
 import connectToDb from "./config/dbConfig.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import geminiRoutes from "./routes/geminiRoutes.js";
-
+import githubRoutes from "./routes/githubRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -46,6 +46,7 @@ app.use("/student", studentRoutes);
 app.use("/admin",adminRoutes);
 
 app.use("/gemini", geminiRoutes);
+app.use('/github',githubRoutes)
 
 // Connect to MongoDB and start the server
 async function startServer() {
