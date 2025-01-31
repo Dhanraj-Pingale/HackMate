@@ -109,7 +109,7 @@ const HackathonTable = () => {
               </PaginationItem>
               <PaginationItem>
                 <PaginationNext
-                  className="text-white hover:bg-white"
+                  className="text-white   hover:bg-gray-700"
                   onClick={() => currentPage < Math.ceil(hackathons.length / rowsPerPage) && paginate(currentPage + 1)}
                 />
               </PaginationItem>
