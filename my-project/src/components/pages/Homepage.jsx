@@ -36,8 +36,9 @@ const Homepage = () => {
                 </div>
 
                 <Carousel
-                    plugins={[Autoplay({ delay: 2000 })]}
+                    plugins={[Autoplay({ delay: 1000 })]}
                     className="w-full py-12"
+                    loop={true}
                 >
                     <CarouselContent className="flex gap-10 sm:gap-24 items-center pl-10 sm:pl-20 pr-10 sm:pr-20">
                         {techLogos.map(({ name, id, path }) => (
