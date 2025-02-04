@@ -16,8 +16,8 @@ import AdminHome from "./components/admin/AdminHome";
 import LandingPage from "./components/authentications/LandingPage";
 import SeeAllhackathon from "./components/admin/SeeAllhackathon";
 import ViewTeam from "./components/pages/ViewTeam";
-import ShowReportOneHack from "./components/Admin/ShowReportOneHack";
-import ShowTeamdetailed from "./components/Admin/ShowTeamDetailed";
+import ShowReportOneHack from "./components/admin/ShowReportOneHack";
+import ShowTeamdetailed from "./components/admin/ShowTeamDetailed";
 
 const App = () => {
   return (

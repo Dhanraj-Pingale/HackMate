@@ -95,7 +95,7 @@ const AllHackathons = () => {
             >
               <CardHeader>
                 <CardTitle>{hackathon.name}</CardTitle>
-                <CardDescription>{hackathon.description}</CardDescription>
+                {/* <CardDescription>{hackathon.description}</CardDescription> */}
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400">Start Date: {new Date(hackathon.startDate).toLocaleDateString()}</p>
