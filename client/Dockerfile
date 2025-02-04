@@ -9,7 +9,7 @@ COPY package*.json ./
 
 # Install dependencies (this will leverage Docker cache for faster builds)
 RUN npm install --silent
-
+ 
 # Copy the rest of the application code into the container
 COPY . .
 
